@@ -22,54 +22,21 @@ DATA = {
 
 
 
-
-
-
-
-def omlet(request):
-    serving = int(request.Get.get('serving',1))
-    template_name = 'calculator/index.html'
+def recipe(request, dish):
+    portion = int(request.GET.get('servings', 1))
+    dish = DATA.get(dish)
+    menu_portion = {}
+    for key, values in dish.items():
+        menu_portion[key] = round(values * portion, 2)
     context = {
-       'recipe': {
-         'яйца шт': 2 * serving,
-         'Молоко л': 0.1 * serving,
-         'соль, ч.л.': 0.5 * serving,
-       }
-     }
-
-
-    return (request, template_name, context)
-
-
-def pasta(request):
-    serving = request.Get.get('serving')
-
-    template_name = 'calculator/index.html'
-    context = {
-       'recipe': {
-         'макароны, г': 0.3 * serving,
-         'сыр, г': 0.05 * serving,
-       }
-     }
-
-
-    return render(request, template_name, context)
-
-
-def buter(request):
-    serving = request.Get.get('serving',1)
-    template_name = 'calculator/index.html'
-    context = {
-        'buter': {
-        'хлеб, ломтик': 1 * serving,
-        'колбаса, ломтик': 1 * serving,
-        'сыр, ломтик': 1 * serving,
-        'помидор, ломтик': 1 * serving,
-
-        }
+        'dish': dish,
+        'recipe': menu_portion,
     }
 
-    return render(request, template_name, context)
+    return render(request, 'calculator/index.html', context)
+
+
+
 
 
 
